@@ -103,6 +103,18 @@ add_executable(mono_live
 Examples/Monocular/mono_live.cc)
 target_link_libraries(mono_live ${PROJECT_NAME})
 
+include_directories("/usr/local/ffmpeg/include")
+link_directories("/usr/local/ffmpeg/lib")
+
+SET(CMAKE_BUILD_TYPE RELEASE)
+
+add_executable(mono_mobile_live
+   Examples/Monocular/mono_mobile_live.cc
+)
+target_link_libraries(mono_mobile_live 
+   ${PROJECT_NAME}
+   ${PROJECT_SOURCE_DIR}/Thirdparty/Network/lib/libNetwork.so
+)
 
 #add_executable(mono_tum_mapsave
 #Examples/Monocular/mono_tum_mapsave.cc)
