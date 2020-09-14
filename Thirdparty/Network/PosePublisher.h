@@ -9,10 +9,18 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <iostream>
+#include <vector>
 #include <chrono>
 #include <opencv2/opencv.hpp>
 
 using namespace std;
+
+enum MsgType {
+    Camera = 1,
+    Markers,
+    Plane,
+    Intrinsic
+};
 
 template<size_t n, typename T>
 union ARRAY_BUFFER {
@@ -32,6 +40,10 @@ struct DATA_BUFFER {
     ARRAY_BUFFER<n, T> array_buffer;
 };
 
+struct MarkerInfo {
+    int id;
+    cv::Mat Tmw;
+};
 
 class PosePublisher {
 public:
@@ -41,10 +53,20 @@ public:
 
     int sendInt(int val);
 
-    int sendTcw(const cv::Mat &tcw);
+    int sendMat4x4(const cv::Mat &mat);
+
+    int sendTcw(int status, const cv::Mat &Tcw);
+
+    int sendMarkers(const std::vector<MarkerInfo> &markers);
+
+    int sendMarker(const MarkerInfo &marker);
+
+    int sendIntrinsic(float fx, float fy, float cx, float cy);
 private:
     int conn_fd;
     int listen_fd;
     INT_BUFFER int_buffer;
-    ARRAY_BUFFER<16, float> tcw_buffer;
+    ARRAY_BUFFER<16, float> mat4x4_buffer;
+    ARRAY_BUFFER<4, float> intrinsic_buffer;
+    DATA_BUFFER<16, float> marker_buffer;
 };

@@ -65,10 +65,18 @@ int main(int argc, char **argv)
 
     string url = "rtmp://192.168.43.92:1935/live/test";
     PosePublisher publisher("192.168.43.92", 12345);
+    cv::FileStorage fSettings(settings_path, cv::FileStorage::READ);
+    float fx = fSettings["Camera.fx"];
+    float fy = fSettings["Camera.fy"];
+    float cx = fSettings["Camera.cx"];
+    float cy = fSettings["Camera.cy"];
+    publisher.sendIntrinsic(fx, fy, cx, cy);
+
     FrameReceiver receiver(url);
     receiver.startReceive();
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
     ORB_SLAM2::System SLAM(voc_path, settings_path, ORB_SLAM2::System::MONOCULAR, true);
+
     // Vector for tracking time statistics
     vector<float> vTimesTrack;
 
@@ -104,8 +112,16 @@ int main(int argc, char **argv)
         vTimesTrack.push_back(ttrack);
 
         // publisher.sendInt(SLAM.GetTrackingState());
-        if (SLAM.GetTrackingState() == 2 && Tcw.cols == 4 && Tcw.rows == 4) {
-            publisher.sendTcw(Tcw);
+        publisher.sendTcw(SLAM.GetTrackingState(), Tcw);
+        // if (SLAM.GetTrackingState() == 2 && Tcw.cols == 4 && Tcw.rows == 4) {
+        // }
+        vector<ORB_SLAM2::MapMarker*> markers = SLAM.GetAllMapMarkers();
+        if (!markers.empty()) {
+            vector<MarkerInfo> marker_infos;
+            for (auto marker : markers) {
+                marker_infos.push_back({marker->mMarkerId, marker->GetPose()});
+            }
+            publisher.sendMarkers(marker_infos);
         }
         // Wait to load the next frame
         double T = 1.0 / fps;
@@ -135,6 +151,11 @@ int main(int argc, char **argv)
     SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
 
     return 0;
+}
+
+void sendMarkers(const vector<ORB_SLAM2::MapMarker*> &markers) {
+    
+
 }
 
 void LoadImages(const string &strFile, vector<string> &vstrImageFilenames, vector<double> &vTimestamps)
