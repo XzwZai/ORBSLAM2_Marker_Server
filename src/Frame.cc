@@ -212,7 +212,7 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     mvbOutlier = vector<bool>(N,false);
 
 	MN = mvMarkers.size();
-	cout << "marker num : " << MN << endl;
+	// cout << "marker num : " << MN << endl;
 	mvpMapMarkers = vector<MapMarker*>(MN, static_cast<MapMarker*>(NULL));
 
     // This is done only for the first Frame (or after a change in the calibration)

@@ -3,6 +3,7 @@
     "files.associations": {
         "chrono": "cpp",
         "iostream": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "thread": "cpp"
     }
 }

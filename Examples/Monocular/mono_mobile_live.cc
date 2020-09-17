@@ -92,8 +92,8 @@ int main(int argc, char **argv)
     {
         // Read image from file
         im = receiver.getCurFrame();
-        transpose(im, im);
-        flip(im, im, 0);
+        // transpose(im, im);
+        // flip(im, im, 0);
         if(im.empty())
         {
             cout << endl << "No image yet" << endl;

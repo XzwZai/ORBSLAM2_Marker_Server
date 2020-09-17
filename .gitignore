@@ -1,4 +1,6 @@
 CMakeLists.txt.user
+Examples/Monocular/mono_live
+Examples/Monocular/mono_mobile_live
 Examples/Monocular/mono_euroc
 Examples/Monocular/mono_kitti
 Examples/Monocular/mono_tum

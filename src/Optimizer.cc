@@ -1454,7 +1454,7 @@ void Optimizer::LocalBundleAdjustmentWithMarker(KeyFrame *pKF, bool* pbStopFlag,
 		chi2Sum += e->chi2();
 
 	}
-	cout << "chi2 : " << chi2Sum / vpEdgesCameraMarkers.size() << endl;
+	// cout << "chi2 : " << chi2Sum / vpEdgesCameraMarkers.size() << endl;
 
 	// Get Map Mutex
 	unique_lock<mutex> lock(pMap->mMutexMapUpdate);
