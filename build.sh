@@ -15,6 +15,15 @@ cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j
 
+cd ../../Network
+
+echo "Configuring and building Thirdparty/Network ..."
+
+mkdir build
+cd build
+cmake ..
+make -j
+
 cd ../../../
 
 echo "Uncompress vocabulary ..."
